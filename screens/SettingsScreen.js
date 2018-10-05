@@ -8,8 +8,7 @@ class SettingsScreen extends Component {
       tabBarIcon: ({ tintColor }) => (
          <Icon
             name="settings"
-            type="feather"
-            color={MainColor}
+            color={tintColor}
          />
       )
    }

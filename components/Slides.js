@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Image, Dimensions, Animated, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, Dimensions, Animated, StyleSheet, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-elements';
-import { FourthColor } from './Colors';
 
 import { Constants } from 'expo';
 import Indicator from './Indicator';
+import { MainColor, FourthColor } from './index';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -56,12 +56,12 @@ export default class Slides extends Component {
             </Animated.ScrollView>
 
             <View style={styles.buttonWrapper}>
-               <Button
-                  title="Telusuri Sekarang"
-                  backgroundColor="rgba(0,0,0,0.3)"
+               <TouchableHighlight
                   onPress={this.props.onComplete}
-                  buttonStyle={{ borderRadius: 16, padding: 15, paddingLeft: 25, paddingRight: 25 }}
-               />
+                  style={{ width: SCREEN_WIDTH, backgroundColor: 'rgba(0,0,0,0.5)', paddingVertical: 20 }}
+               >
+                <Text style={{ color: '#fff', textAlign: 'center' }}>Telusuri Sekarang</Text>
+               </TouchableHighlight>
             </View>
 
             <View style={{ alignItems: 'center' }}>
@@ -116,10 +116,10 @@ const styles = {
    },
    buttonWrapper: {
       position: 'absolute',
-      marginTop: 40,
-      margin: 12,
-      left: (SCREEN_WIDTH / 2) - 100,
-      bottom: 50
+      margin: 0,
+      width: SCREEN_WIDTH,
+      left: 0,
+      bottom: 0
    },
    frame: {
       position: 'absolute',
@@ -147,6 +147,6 @@ const styles = {
    indicator: {
       flexDirection: 'row',
       position: 'absolute',
-      bottom: 10
+      bottom: 70
    }
 }

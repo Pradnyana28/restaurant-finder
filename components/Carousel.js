@@ -27,7 +27,7 @@ export default class ImageCarousel extends Component {
             even={(index + 1) % 2 === 0}
             parallax={true}
             parallaxProps={parallaxProps}
-            navigation={false}
+            navigation={this.props.navigation}
          />
       );
     }
@@ -54,7 +54,7 @@ export default class ImageCarousel extends Component {
                 <Carousel
                   ref={(c) => { if (!this.state.slider1Ref) { this.setState({ slider1Ref: c }); } }}
                   data={this.state.entries}
-                  renderItem={this._renderItemWithParallax}
+                  renderItem={this._renderItemWithParallax.bind(this)}
                   sliderWidth={SCREEN_WIDTH}
                   itemWidth={SCREEN_WIDTH}
                   slideStyle={{ width: SCREEN_WIDTH }}

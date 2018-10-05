@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, AsyncStorage } from 'react-native';
 import Slides from '../components/Slides';
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from '../components/KNSpinner';
 
 import Images from '@assets/images';
 
@@ -32,16 +32,7 @@ class WelcomeScreen extends Component {
 
    render() {
       if (this.state.token === null) {
-         return(
-            <Spinner
-               visible={true}
-               textContent={"Loading..."}
-               textStyle={{color: '#FFF'}}
-               cancellable={false}
-               animation={'fade'}
-               overlayColor={"rgba(0,0,0,1)"}
-            />
-         );
+         return <Spinner />;
       }
 
       return(

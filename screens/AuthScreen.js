@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, AsyncStorage, Dimensions, Image } from 'react-native';
+import { View, Text, AsyncStorage, Dimensions, Image, TouchableHighlight } from 'react-native';
 import { Button, SocialIcon } from 'react-native-elements';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import { Constants } from 'expo';
 import * as actions from '../actions';
 
 import { FirstColor } from '../components';
 import Images from '@assets/images';
+import { SERVER_URL, APP_ID } from 'react-native-dotenv';
 
 // display
 import { MainColor, SecondColor, Blue } from '../components/Colors';
@@ -24,7 +27,32 @@ class AuthScreen extends Component {
 
    onAuthComplete(props) {
       if (props.token) {
-         this.props.navigation.navigate('explore');
+         AsyncStorage.getItem('fb_data')
+            .then(req => JSON.parse(req))
+            .then(json => {
+              // If data in json is exists
+              if (json !== null) {
+                  //  Save token to server
+                  axios.post(SERVER_URL + "?p=login", {
+                    appId: APP_ID,
+                    email: json.email,
+                    token: props.token,
+                    device: Constants.deviceName
+                  })
+                    .then(response => {
+                      if (response.data.success == true) {
+                        this.props.navigation.navigate('explore');
+                      } else {
+                        alert(response.data.result);
+                        AsyncStorage.removeItem('fb_token');
+                      }
+                    })
+                    .catch(error => {
+                      alert("We can't connect to server!");
+                      AsyncStorage.removeItem('fb_token');
+                    });
+              }
+            });
       }
    }
 
@@ -38,12 +66,20 @@ class AuthScreen extends Component {
             <View style={styles.fbWrapper}>
                <Text style={styles.title}>Kuliner Nusantara</Text>
                <SocialIcon
-                 title='Sign In With Facebook'
+                 title='Masuk dengan Facebook'
                  button
                  type='facebook'
                  style={{ width: (SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) }}
                  onPress={() => this.props.facebookLogin()}
                />
+               
+               <TouchableHighlight 
+                 style={{ marginTop: 40 }}
+                 onPress={() => this.props.navigation.navigate('explore')}
+                 underlayColor="rgba(255,255,255,0.3)"
+               >
+                  <Text style={{ textAlign: 'center', color: '#fff' }}>Lanjutkan Tanpa Login</Text>
+               </TouchableHighlight>
             </View>
 
             <View style={styles.copyright}>
@@ -56,7 +92,7 @@ class AuthScreen extends Component {
 
 const styles = {
    container: {
-      marginTop: 25,
+      paddingTop: 25,
       backgroundColor: SecondColor,
       height: DEVICE_HEIGHT,
       justifyContent: 'center',
